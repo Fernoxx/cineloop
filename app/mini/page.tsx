@@ -203,56 +203,57 @@ export default function MiniApp() {
   }
 
   // Movie Disk Component with enhanced styling
-  const MovieDisk = ({ movie, index, isRecent = false }: { movie: Movie, index: number, isRecent?: boolean }) => (
-    <div className={`relative group ${isRecent ? 'transform hover:scale-105 transition-all duration-300' : ''}`}>
-      <div className="relative">
-        {/* Disk Case */}
-        <div className="w-20 h-28 bg-gradient-to-b from-gray-800 to-gray-900 rounded-sm shadow-xl transform perspective-1000 rotate-y-12">
-          {/* Movie Poster */}
-          <div className="w-full h-full overflow-hidden rounded-sm border border-gray-700">
-            <img
-              src={getPosterUrl(movie.poster_path)}
-              alt={movie.title}
-              className="w-full h-full object-cover"
-              onError={(e) => {
-                e.currentTarget.src = '/placeholder-movie.jpg'
-              }}
-            />
-          </div>
-          
-          {/* Spine Label */}
-          <div className="absolute -right-1 top-0 w-2 h-full bg-gradient-to-b from-yellow-600 to-yellow-800 rounded-r-sm">
-            <div className="text-[6px] text-white font-bold writing-mode-vertical text-center mt-1 truncate">
-              {movie.title.slice(0, 8)}
-            </div>
+const MovieDisk = ({ movie, index, isRecent = false }: { movie: Movie; index: number; isRecent?: boolean }) => (
+  <div className={`relative group ${isRecent ? 'transform hover:scale-105 transition-all duration-300' : ''}`}>
+    <div className="relative">
+      {/* Disk Case */}
+      <div className="w-20 h-28 bg-gradient-to-b from-gray-800 to-gray-900 rounded-sm shadow-xl transform perspective-1000 rotate-y-12">
+        {/* Movie Poster */}
+        <div className="w-full h-full overflow-hidden rounded-sm border border-gray-700">
+          <img
+            src={getPosterUrl(movie.poster_path)}
+            alt={movie.title}
+            className="w-full h-full object-cover"
+            onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+              const target = e.currentTarget as HTMLImageElement;
+              target.src = '/placeholder-movie.jpg';
+            }}
+          />
+        </div>
+        
+        {/* Spine Label */}
+        <div className="absolute -right-1 top-0 w-2 h-full bg-gradient-to-b from-yellow-600 to-yellow-800 rounded-r-sm">
+          <div className="text-[6px] text-white font-bold writing-mode-vertical text-center mt-1 truncate">
+            {movie.title.slice(0, 8)}
           </div>
         </div>
-
-        {/* DVD Disc (partially visible) */}
-        <div className="absolute -right-3 top-6 w-16 h-16">
-          <div className="w-full h-full bg-gradient-conic from-gray-300 via-gray-100 to-gray-300 rounded-full shadow-lg border-2 border-gray-400">
-            <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black opacity-20 rounded-full"></div>
-            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-gray-800 rounded-full"></div>
-            <Disc className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3 h-3 text-gray-600" />
-          </div>
-        </div>
-
-        {/* Movie Info Overlay */}
-        {isRecent && (
-          <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-80 transition-all duration-300 rounded-sm flex items-center justify-center opacity-0 group-hover:opacity-100">
-            <div className="text-center text-white p-2">
-              <div className="text-xs font-bold mb-1 truncate">{movie.title}</div>
-              <div className="text-[10px] text-gray-300">@{movie.username}</div>
-              <div className="text-[10px] text-yellow-400 flex items-center justify-center mt-1">
-                <Star className="w-2 h-2 mr-1 fill-current" />
-                {movie.rating.toFixed(1)}
-              </div>
-            </div>
-          </div>
-        )}
       </div>
+
+      {/* DVD Disc (partially visible) */}
+      <div className="absolute -right-3 top-6 w-16 h-16">
+        <div className="w-full h-full bg-gradient-conic from-gray-300 via-gray-100 to-gray-300 rounded-full shadow-lg border-2 border-gray-400">
+          <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black opacity-20 rounded-full"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-gray-800 rounded-full"></div>
+          <Disc className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3 h-3 text-gray-600" />
+        </div>
+      </div>
+
+      {/* Movie Info Overlay */}
+      {isRecent && (
+        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-80 transition-all duration-300 rounded-sm flex items-center justify-center opacity-0 group-hover:opacity-100">
+          <div className="text-center text-white p-2">
+            <div className="text-xs font-bold mb-1 truncate">{movie.title}</div>
+            <div className="text-[10px] text-gray-300">@{movie.username}</div>
+            <div className="text-[10px] text-yellow-400 flex items-center justify-center mt-1">
+              <Star className="w-2 h-2 mr-1 fill-current" />
+              {movie.rating.toFixed(1)}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
-  )
+  </div>
+)
 
   // Loading screen with cinematic styling
   if (isLoading) {
