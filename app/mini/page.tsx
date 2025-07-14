@@ -199,10 +199,10 @@ export default function MiniApp() {
     )
   }
 
-  const getPosterUrl = (posterPath: string | null) => {
-    if (!posterPath) return '/placeholder-movie.jpg'
-    return `https://image.tmdb.org/3/t/p/w500${posterPath}`
-  }
+  const getPosterUrl = (posterPath: string | null | undefined) => {
+  if (!posterPath) return '/placeholder-movie.jpg'
+  return `https://image.tmdb.org/3/t/p/w500${posterPath}`
+}
 
   // Movie Disk Component with enhanced styling
 const MovieDisk = ({ movie, index, isRecent = false }: { movie: Movie; index: number; isRecent?: boolean }) => (
