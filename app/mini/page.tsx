@@ -377,18 +377,18 @@ const MovieDisk = ({ movie, index, isRecent = false }: { movie: Movie; index: nu
   )}
 
   {hasSubmittedToday() && (
-    <div className="text-yellow-400 text-sm bg-yellow-900/20 p-3 rounded-lg border border-yellow-600/30">
-      ⏰ You've submitted 3 movies in the last 24 hours. Come back in {getTimeUntilNextSubmission()}!
-    </div>
-  )}
+  <div className="text-yellow-400 text-sm bg-yellow-900/20 p-3 rounded-lg border border-yellow-600/30">
+    ⏰ You've submitted 3 movies in the last 24 hours. Come back later!
+  </div>
+)}
 
-  <button
-    onClick={submitMovie}
-    disabled={!movieInput.trim() || hasSubmittedToday() || isValidating}
-    className="w-full bg-gradient-to-r from-yellow-600 to-yellow-700 hover:from-yellow-500 hover:to-yellow-600 disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed text-black font-bold py-3 px-4 rounded-lg transition-all duration-300 shadow-lg"
-  >
-    {isValidating ? '🔍 Validating...' : '🎬 Add to Collection'}
-  </button>
+<button
+  onClick={submitMovie}
+  disabled={!movieInput.trim() || hasSubmittedToday() || isValidating}
+  className="w-full bg-gradient-to-r from-yellow-600 to-yellow-700 hover:from-yellow-500 hover:to-yellow-600 disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed text-black font-bold py-3 px-4 rounded-lg transition-all duration-300 shadow-lg"
+>
+  {isValidating ? '🔍 Validating...' : '🎬 Add to Collection'}
+</button>
 </div>
 
       {/* View Collection Button */}
