@@ -146,29 +146,31 @@ export default function MiniApp() {
   }
 
   const shareToFarcaster = async () => {
-    if (!lastSubmission) return
+  if (!lastSubmission) return
 
-    const shareText = `🎬 Added "${lastSubmission.title}" to the CineLoop chain!\n⭐ Rating: ${lastSubmission.rating.toFixed(1)}/10\n\nKeep the chain going! 🔗`
-    
-    if (isMiniApp) {
-      try {
-        const { sdk } = await import('@farcaster/miniapp-sdk')
-        // Using latest SDK composeCast function if available
-        if (sdk.actions.composeCast) {
-          await sdk.actions.composeCast({
-            text: shareText,
-            embeds: [process.env.NEXT_PUBLIC_APP_URL!]
-          })
-        } else {
-          await sdk.actions.openUrl(`https://warpcast.com/~/compose?text=${encodeURIComponent(shareText)}&embeds%5B%5D=${process.env.NEXT_PUBLIC_APP_URL}`)
-        }
-      } catch (error) {
-        console.error('Failed to share:', error)
+  // Fix: Handle undefined environment variable
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://cineloop.vercel.app'
+  const shareText = `🎬 Added "${lastSubmission.title}" to the CineLoop chain!\n⭐ Rating: ${lastSubmission.rating.toFixed(1)}/10\n\nKeep the chain going! 🔗`
+  
+  if (isMiniApp) {
+    try {
+      const { sdk } = await import('@farcaster/miniapp-sdk')
+      // Fix: Add optional chaining for composeCast
+      if (sdk.actions?.composeCast) {
+        await sdk.actions.composeCast({
+          text: shareText,
+          embeds: [appUrl] // Fixed: now guaranteed to be string
+        })
+      } else {
+        await sdk.actions.openUrl(`https://warpcast.com/~/compose?text=${encodeURIComponent(shareText)}&embeds%5B%5D=${appUrl}`)
       }
-    } else {
-      window.open(`https://warpcast.com/~/compose?text=${encodeURIComponent(shareText)}&embeds%5B%5D=${process.env.NEXT_PUBLIC_APP_URL}`, '_blank')
+    } catch (error) {
+      console.error('Failed to share:', error)
     }
+  } else {
+    window.open(`https://warpcast.com/~/compose?text=${encodeURIComponent(shareText)}&embeds%5B%5D=${appUrl}`, '_blank')
   }
+}
 
   // Helper functions
   const getLastLetters = (title: string): string => {
