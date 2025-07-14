@@ -336,46 +336,60 @@ const MovieDisk = ({ movie, index, isRecent = false }: { movie: Movie; index: nu
       </div>
 
       {/* Movie Input */}
-      <div className="space-y-4">
-        <div className="bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-600 p-[1px] rounded-lg">
-          <div className="bg-gray-900 rounded-lg p-4">
-            <label className="block text-white font-medium mb-3 text-center">
-              🎬 Add Your Movie {movieChain.length > 0 && `(starts with "${getNextRequiredLetter()}")`}
-            </label>
-            <div className="relative">
-              <input
-                type="text"
-                value={movieInput}
-                onChange={(e) => setMovieInput(e.target.value)}
-                placeholder="Enter movie title..."
-                className="w-full px-4 py-3 bg-black border border-yellow-600/30 rounded-lg text-white placeholder-gray-500 focus:border-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-600/20"
-                disabled={hasSubmittedToday() || isValidating}
-              />
-              <Search className="absolute right-3 top-3 w-5 h-5 text-yellow-600" />
-            </div>
-          </div>
+<div className="space-y-4">
+  <div className="bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-600 p-[1px] rounded-lg">
+    <div className="bg-gray-900 rounded-lg p-4">
+      <label className="block text-white font-medium mb-3 text-center">
+        🎬 Add Your Movie {movieChain.length > 0 && `(starts with "${getNextRequiredLetter()}")`}
+      </label>
+      
+      {/* Show 24h submission count */}
+      {movieChain.filter(m => {
+        const twentyFourHoursAgo = new Date(Date.now() - (24 * 60 * 60 * 1000))
+        return m.fid === currentUser.fid && new Date(m.created_at) > twentyFourHoursAgo
+      }).length > 0 && (
+        <div className="text-center text-gray-400 text-sm mb-3">
+          Movies in last 24h: {movieChain.filter(m => {
+            const twentyFourHoursAgo = new Date(Date.now() - (24 * 60 * 60 * 1000))
+            return m.fid === currentUser.fid && new Date(m.created_at) > twentyFourHoursAgo
+          }).length}/3
         </div>
-
-        {validationError && (
-          <div className="text-red-400 text-sm bg-red-900/20 p-3 rounded-lg border border-red-600/30">
-            ❌ {validationError}
-          </div>
-        )}
-
-        {hasSubmittedToday() && (
-          <div className="text-yellow-400 text-sm bg-yellow-900/20 p-3 rounded-lg border border-yellow-600/30">
-            ⏰ You've already submitted a movie today. Come back tomorrow!
-          </div>
-        )}
-
-        <button
-          onClick={submitMovie}
-          disabled={!movieInput.trim() || hasSubmittedToday() || isValidating}
-          className="w-full bg-gradient-to-r from-yellow-600 to-yellow-700 hover:from-yellow-500 hover:to-yellow-600 disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed text-black font-bold py-3 px-4 rounded-lg transition-all duration-300 shadow-lg"
-        >
-          {isValidating ? '🔍 Validating...' : '🎬 Add to Collection'}
-        </button>
+      )}
+      
+      <div className="relative">
+        <input
+          type="text"
+          value={movieInput}
+          onChange={(e) => setMovieInput(e.target.value)}
+          placeholder="Enter movie title..."
+          className="w-full px-4 py-3 bg-black border border-yellow-600/30 rounded-lg text-white placeholder-gray-500 focus:border-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-600/20"
+          disabled={hasSubmittedToday() || isValidating}
+        />
+        <Search className="absolute right-3 top-3 w-5 h-5 text-yellow-600" />
       </div>
+    </div>
+  </div>
+
+  {validationError && (
+    <div className="text-red-400 text-sm bg-red-900/20 p-3 rounded-lg border border-red-600/30">
+      ❌ {validationError}
+    </div>
+  )}
+
+  {hasSubmittedToday() && (
+    <div className="text-yellow-400 text-sm bg-yellow-900/20 p-3 rounded-lg border border-yellow-600/30">
+      ⏰ You've submitted 3 movies in the last 24 hours. Come back in {getTimeUntilNextSubmission()}!
+    </div>
+  )}
+
+  <button
+    onClick={submitMovie}
+    disabled={!movieInput.trim() || hasSubmittedToday() || isValidating}
+    className="w-full bg-gradient-to-r from-yellow-600 to-yellow-700 hover:from-yellow-500 hover:to-yellow-600 disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed text-black font-bold py-3 px-4 rounded-lg transition-all duration-300 shadow-lg"
+  >
+    {isValidating ? '🔍 Validating...' : '🎬 Add to Collection'}
+  </button>
+</div>
 
       {/* View Collection Button */}
       <button
