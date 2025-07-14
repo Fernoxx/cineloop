@@ -4,11 +4,9 @@ export async function GET() {
   // CRITICAL: Following 2024+ Farcaster Mini Apps specification
   const manifest = {
     accountAssociation: {
-      // TODO: Generate this using Warpcast Developer Tools
-      // Go to: https://warpcast.com/~/developers/mini-apps/manifest
-      header: "PLACEHOLDER_HEADER",
-      payload: "PLACEHOLDER_PAYLOAD", 
-      signature: "PLACEHOLDER_SIGNATURE"
+      header: "eyJmaWQiOjI0MjU5NywidHlwZSI6ImF1dGgiLCJrZXkiOiIweDNjRjg3Qjc2ZDJBMUQzNkY5NTQyQjREYTJhNkI0QjNEYzBmMEJiMmUifQ",
+      payload: "eyJkb21haW4iOiJjaW5lbG9vcC52ZXJjZWwuYXBwIn0",
+      signature: "lUF/7l922s1o/Sv7sGFNk3EjLwfw5WI/PL40fxBuLWVab0M94yRY/uie6F7dqN0hcdjDuz3H1q8QYCj9vjFvQhs="
     },
     // CRITICAL: Use "miniapp" (not "miniapps" or "frame")
     miniapp: {
