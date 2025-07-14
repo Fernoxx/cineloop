@@ -192,14 +192,16 @@ export default function MiniApp() {
   }
 
   const hasSubmittedToday = (): boolean => {
-    const today = new Date().toDateString()
-    return movieChain.some(movie => 
-      movie.fid === currentUser.fid && 
-      new Date(movie.created_at).toDateString() === today
-    )
-  }
+  const twentyFourHoursAgo = new Date(Date.now() - (24 * 60 * 60 * 1000))
+  const count = movieChain.filter(movie => 
+    movie.fid === currentUser.fid && 
+    new Date(movie.created_at) > twentyFourHoursAgo
+  ).length
+  
+  return count >= 3
+}
 
-  const getPosterUrl = (posterPath: string | null | undefined) => {
+const getPosterUrl = (posterPath: string | null | undefined) => {
   if (!posterPath) return '/placeholder-movie.jpg'
   return `https://image.tmdb.org/3/t/p/w500${posterPath}`
 }
